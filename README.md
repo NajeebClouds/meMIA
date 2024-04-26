@@ -24,12 +24,12 @@ Before executing the demo, make sure Python 3 and PyTorch are installed on your 
 ## Testing
 
 Execute the demo code using the following command:
-
-```bash
-python meMIA_main.py --attack_type X --dataset_name Y
 | Attack Type | Name   |
 |-------------|--------|
 | 0           | MemInf |
+```bash
+python meMIA_main.py --attack_type X --dataset_name Y
+
 
 ## Exaple for tesing purchase
 ```bash
