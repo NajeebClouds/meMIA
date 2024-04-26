@@ -27,6 +27,10 @@ Execute the demo code using the following command:
 
 ```bash
 python meMIA_main.py --attack_type X --dataset_name Y
+| Attack Type | Name   |
+|-------------|--------|
+| 0           | MemInf |
+
 ## Exaple for tesing purchase
 ```bash
 python meMIA_main.py --attack_type X --dataset_name Y
