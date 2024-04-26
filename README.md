@@ -29,7 +29,7 @@ Users should install Python3 and PyTorch at first.
 
 For dataset name, there are 4 datasets in the code, namely, FMNIST (Fashion-MNIST), STL10, and UTKFace.
 
-For AttrInf, users should provide two attributes in the command line with the format "X_Y" and only CelebA and UTKface contain 2 attributes, e.g. 
+For MemInf, users should provide two attributes in the command line with the format "X_Y" and only CelebA and UTKface contain 2 attributes, e.g. 
 ```python meMIA_main.py --attack_type 0 --dataset_name purchase --mode -1 --train_shadow --train_model
 
 ### For MemInf
