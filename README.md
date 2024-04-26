@@ -1,6 +1,6 @@
 # meMIA Demo Code
 
-This is the demo code for meMIA attaclk method
+This is the demo code for meMIA attack method.
 
 ## Building Datasets
 We prefer the users could provide the dataloader by themselves. But we show the demo dataloader in the code. Due to the size of the dataset, we won't upload it to github.
@@ -27,10 +27,10 @@ Users should install Python3 and PyTorch at first.
 </tr>
 </tbody></table>
 
-For dataset name, there are 4 datasets in the code, namely CelebA, FMNIST (Fashion-MNIST), STL10, and UTKFace.
+For dataset name, there are 4 datasets in the code, namely, FMNIST (Fashion-MNIST), STL10, and UTKFace.
 
 For AttrInf, users should provide two attributes in the command line with the format "X_Y" and only CelebA and UTKface contain 2 attributes, e.g. 
-```python demo.py --attack_type 2 --dataset_name UTKFace --attributes race_gender```
+```python meMIA_main.py --attack_type 0 --dataset_name purchase --mode -1 --train_shadow --train_model
 
 ### For MemInf
 We have one mode in this function
