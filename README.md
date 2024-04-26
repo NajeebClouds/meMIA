@@ -3,20 +3,27 @@
 This repository contains the demo code for the meMIA (Membership Inference Attack) method.
 
 ## Building Datasets
-Users are encouraged to provide their own data loaders. However, a demo data loader is included in the code. The datasets themselves are not uploaded to GitHub due to their size.
 
-For the UTKFace dataset, two folders are downloaded from the [official website](https://susanqq.github.io/UTKFace/) into the `UTKFace` directory:
+Users are recommended to provide their own data loaders. However, we include a demo data loader in the code. Due to the large size of the datasets, we do not upload them to GitHub.
 
-- The `processed` folder contains three `landmark_list` files (also available on the official website). This folder aids in quickly retrieving image names since all image features can be deduced from the filenames.
-- The `raw` folder includes all aligned and cropped images.
+### UTKFace Dataset
 
-For the FMNIST and STL10 datasets, PyTorch provides built-in support, making these datasets easy to use.
+For the UTKFace dataset, we utilize two folders that can be downloaded from the [official website](https://susanqq.github.io/UTKFace/):
 
-## Preparing
-Before running the demo, users should have Python 3 and PyTorch installed on their system.
+- `processed`: This folder contains three `landmark_list` files (also downloadable from the official website). These files are used for quickly accessing image names, as all image features can be inferred from the file names.
+- `raw`: Contains all aligned and cropped images from the dataset.
+
+### FMNIST and STL10 Datasets
+
+For FMNIST and STL10, PyTorch provides these datasets, which can be easily used within the framework.
+
+## Setup
+
+Before executing the demo, make sure Python 3 and PyTorch are installed on your system.
 
 ## Testing
-To test the attack method, use the following command:
+
+Execute the demo code using the following command:
 
 ```bash
 python demo.py --attack_type X --dataset_name Y
