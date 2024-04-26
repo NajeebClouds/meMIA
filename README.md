@@ -1,48 +1,22 @@
 # meMIA Demo Code
 
-This is the demo code for meMIA attack method.
+This repository contains the demo code for the meMIA (Membership Inference Attack) method.
 
 ## Building Datasets
-We prefer the users could provide the dataloader by themselves. But we show the demo dataloader in the code. Due to the size of the dataset, we won't upload it to github.
+Users are encouraged to provide their own data loaders. However, a demo data loader is included in the code. The datasets themselves are not uploaded to GitHub due to their size.
 
-For UTKFace, we have two folders downloaded from [official website](https://susanqq.github.io/UTKFace/) in the UTKFace folder. The first is the "processed" folder which contains three landmark_list files(also can be downloaded from the official website). It is used to get the image name in a fast way because all the features of the images can be achieved from the file names. The second folder is the "raw" folder, which contains all the aligned and cropped images. 
+For the UTKFace dataset, two folders are downloaded from the [official website](https://susanqq.github.io/UTKFace/) into the `UTKFace` directory:
 
-For FMNIST and STL10, PyTorch has offered the datasets and they can be easily employed.
+- The `processed` folder contains three `landmark_list` files (also available on the official website). This folder aids in quickly retrieving image names since all image features can be deduced from the filenames.
+- The `raw` folder includes all aligned and cropped images.
+
+For the FMNIST and STL10 datasets, PyTorch provides built-in support, making these datasets easy to use.
 
 ## Preparing
-Users should install Python3 and PyTorch at first.
+Before running the demo, users should have Python 3 and PyTorch installed on their system.
 
 ## Testing
-```python demo.py --attack_type X --dataset_name Y```
+To test the attack method, use the following command:
 
-<table><tbody>
-<!-- TABLE BODY -->
-<tr>
-<td align="center">Attack Type</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">Name</td>
-<td align="center">MemInf</td>
-</tr>
-</tbody></table>
-
-For dataset name, there are 4 datasets in the code, namely, FMNIST (Fashion-MNIST), STL10, and UTKFace.
-
-For MemInf, users should provide two attributes in the command line with the format "X_Y" and only CelebA and UTKface contain 2 attributes, e.g. 
-```python meMIA_main.py --attack_type 0 --dataset_name purchase --mode -1 --train_shadow --train_model
-
-### For MemInf
-We have one mode in this function
-<table><tbody>
-<!-- TABLE BODY -->
-<tr>
-<td align="center">Mode</td>
-<td align="center">0</td>
-</tr>
-<tr>
-<td align="center">Name</td>
-<td align="center">BlackBox Shadow</td>
-</tr>
-</tbody></table>
-
+```bash
+python demo.py --attack_type X --dataset_name Y
