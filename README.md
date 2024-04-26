@@ -27,7 +27,7 @@ Execute the demo code using the following command:
 | Attack Type | Name   |
 |-------------|--------|
 | 0           | MemInf |
-```bash
+```bash if you have trained shadow and target models run the following
 python meMIA_main.py --attack_type X --dataset_name Y
 
 
