@@ -27,12 +27,12 @@ Execute the demo code using the following command:
 | Attack Type | Name   |
 |-------------|--------|
 | 0           | MemInf |
-```bash if you have trained shadow and target models run the following
-python meMIA_main.py --attack_type X --dataset_name Y
-
-
-## Exaple for tesing purchase
 ```bash
+#If you have trained shadow and target models, run the following
 python meMIA_main.py --attack_type X --dataset_name Y
+
+
+#If you have note trained shadow and target models, run the following
+python meMIA_main.py --attack_type X --dataset_name Y --mode -1 --train_shadow --train_model
 
 
