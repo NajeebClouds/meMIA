@@ -1,14 +1,11 @@
-# ML-Doctor Demo Code
-
-[![arXiv](https://img.shields.io/badge/arxiv-2102.02551-b31b1b)](https://arxiv.org/abs/2102.02551)
-<a href="https://pytorch.org/get-started/locally/"><img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-ee4c2c?logo=pytorch&logoColor=white"></a>
+# meMIA Demo Code
 
 This is the demo code for meMIA attaclk method
 
 ## Building Datasets
 We prefer the users could provide the dataloader by themselves. But we show the demo dataloader in the code. Due to the size of the dataset, we won't upload it to github.
 
-For UTKFace, we have two folders downloaded from [official website](https://susanqq.github.io/UTKFace/) in the UTKFace folder. The first is the "processed" folder which contains three landmark_list files(also can be downloaded from the official website). It is used to get the image name in a fast way because all the features of the images can be achieved from the file names. The second folder is the "raw" folder which contains all the aligned and cropped images. 
+For UTKFace, we have two folders downloaded from [official website](https://susanqq.github.io/UTKFace/) in the UTKFace folder. The first is the "processed" folder which contains three landmark_list files(also can be downloaded from the official website). It is used to get the image name in a fast way because all the features of the images can be achieved from the file names. The second folder is the "raw" folder, which contains all the aligned and cropped images. 
 
 For FMNIST and STL10, PyTorch has offered the datasets and they can be easily employed.
 
