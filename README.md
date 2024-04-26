@@ -1,4 +1,4 @@
-# meMIA Demo Code
+# meMIA
 
 This repository contains the demo code for the meMIA (Membership Inference Attack) method.
 
