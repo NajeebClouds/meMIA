@@ -26,4 +26,9 @@ Before executing the demo, make sure Python 3 and PyTorch are installed on your 
 Execute the demo code using the following command:
 
 ```bash
-python demo.py --attack_type X --dataset_name Y
+python meMIA_main.py --attack_type X --dataset_name Y
+## Exaple for tesing purchase
+```bash
+python meMIA_main.py --attack_type X --dataset_name Y
+
+
