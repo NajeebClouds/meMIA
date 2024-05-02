@@ -4,12 +4,8 @@ import torch
 import argparse
 import torch.nn as nn
 import torchvision.models as models
-
 from meMIA.meminf import *
-from demoloader.train import *
 from demoloader.dataloader import *
-
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -22,6 +18,10 @@ class LSTMClassifier(nn.Module):
        
         self.h_size_1 = 256
         self.h_size_2 = 128
+        # print(f"y: {y.size()}")
+        # print(y)
+    
+        
         self.h_size_3 = 32
         
         self.lstm1 = nn.LSTM(class_num, self.h_size_1, batch_first=True)
@@ -90,29 +90,12 @@ class LSTMClassifier(nn.Module):
         
         y  = self.hidden2label(x5[:, -1, :])
       
-        # print(f"y: {y.size()}")
-        # print(y)
-    
-        
         
         self.hidden1 = self.init_hidden1()
         self.hidden2 = self.init_hidden2()
         self.hidden3 = self.init_hidden3()
         return y
     
-
-
-class attrinf_attack_model(nn.Module):
-    def __init__(self, inputs, outputs):
-        super(attrinf_attack_model, self).__init__()
-        self.classifier = nn.Linear(inputs, outputs)
-
-    def forward(self, x):
-        x = torch.flatten(x, 1)
-        x = self.classifier(x)
-        return x
-
-
 
 class CombinedShadowAttackModel(nn.Module):
     def __init__(self, class_num,  device,  hidden_dim=128, layer_dim=1, output_dim=1, batch_size=64):
@@ -199,8 +182,7 @@ class CombinedShadowAttackModel(nn.Module):
 			nn.Linear(512, 64),
           
 		)
-       
-        
+
         self.meMIA_Encoder_Component_joint = nn.Sequential(
 			nn.Linear(self.h_size_3+64+64, 512), #mine
 			nn.ReLU(),
@@ -262,10 +244,14 @@ class CombinedShadowAttackModel(nn.Module):
         self.hidden2 = self.init_hidden2()
         self.hidden3 = self.init_hidden3()
        
-       # Note: for any specific attack method you have to uncoment the respective part, we are working on it to make it more readible 
+       
     #    #! NSH attack
         
-
+        # label_one_hot_encoded = torch.nn.functional.one_hot(label.to(torch.int64), self.input_dim).float().to(self.device)
+        # # print(f"size of label: {label_one_hot_encoded.size()}")
+        # # print(f"size of label: {label_one_hot_encoded.dtype}")
+        
+        # # exit()
         
         # out_nsh = self.Output_NSH(output)#ouput --> class_num
         # lable_nsh =  self.label_NSH(label_one_hot_encoded)
@@ -280,46 +266,47 @@ class CombinedShadowAttackModel(nn.Module):
         # final_result = self.Encoder_Component(torch.cat((Prediction_Component_result, output), 1))
         # # final_result = self.mia_Encoder_Component(output)
         
-        # #! Mine combined architecture
-        # label_one_hot_encoded = torch.nn.functional.one_hot(label.to(torch.int64), self.input_dim).float()
+        #! Mine combined architecture
+        label_one_hot_encoded = torch.nn.functional.one_hot(label.to(torch.int64), self.input_dim).float()
         
-        # x = output.view(self.batch_size, 1, self.input_dim)
-        # x1, self.hidden1 = self.lstm1(x, self.hidden1)
-        # # x2 = self.dropout1(x1[:, -1, :])
-        # x2 = x1[:, -1, :]
-        # x2 = x2.view(self.batch_size, 1, x2.size()[1])
-        # x3, self.hidden2 = self.lstm2(x2, self.hidden2)
-        # # x4 = self.dropout2(x3[:, -1, :])
-        # x4 = x3[:, -1, :]
-        # x4 = x4.view(self.batch_size, 1, x4.size()[1])
-        # x5, self.hidden2 = self.lstm3(x4, self.hidden3)
+        x = output.view(self.batch_size, 1, self.input_dim)
+        x1, self.hidden1 = self.lstm1(x, self.hidden1)
+        # x2 = self.dropout1(x1[:, -1, :])
+        x2 = x1[:, -1, :]
+        x2 = x2.view(self.batch_size, 1, x2.size()[1])
+        x3, self.hidden2 = self.lstm2(x2, self.hidden2)
+        # x4 = self.dropout2(x3[:, -1, :])
+        x4 = x3[:, -1, :]
+        x4 = x4.view(self.batch_size, 1, x4.size()[1])
+        x5, self.hidden2 = self.lstm3(x4, self.hidden3)
         
-        # output = self.Output_Component_meMIA(output) #64
-        # Prediction_Component_result = self.Prediction_Component(prediction) #ouput --> class_num|64
-        # final_inputs = torch.cat((x5[:, -1, :],Prediction_Component_result, output), 1)
-        # final_result = self.meMIA_Encoder_Component_joint(final_inputs)
+        output = self.Output_Component_meMIA(output) #64
+        # exit()
+        Prediction_Component_result = self.Prediction_Component(prediction) #ouput --> class_num|64
+        final_inputs = torch.cat((x5[:, -1, :],Prediction_Component_result, output), 1)
+        final_result = self.meMIA_Encoder_Component_joint(final_inputs)
         
         # # Droping the LSTMs part (meMIA only on NN)
         # Prediction_Component_result = self.Prediction_Component(prediction) #ouput --> class_num 64
         # final_result = self.meMIA_Encoder_Component(torch.cat((Prediction_Component_result, output), 1))
         
         # Dropping NN (meMIA only on LSTMs)
-        x = output.view(self.batch_size, 1, self.input_dim)
-        x1, self.hidden1 = self.lstm1(x, self.hidden1)
-        x2 = self.dropout1(x1[:, -1, :])
-        x2 = x2.view(self.batch_size, 1, x2.size()[1])
-        x3, self.hidden2 = self.lstm2(x2, self.hidden2)
-        x4 = self.dropout2(x3[:, -1, :])
-        x4 = x4.view(self.batch_size, 1, x4.size()[1])
-        x5, self.hidden2 = self.lstm3(x4, self.hidden3)
-        final_result = self.hidden2label(x5[:, -1, :])
+        # x = output.view(self.batch_size, 1, self.input_dim)
+        # x1, self.hidden1 = self.lstm1(x, self.hidden1)
+        # x2 = self.dropout1(x1[:, -1, :])
+        # x2 = x2.view(self.batch_size, 1, x2.size()[1])
+        # x3, self.hidden2 = self.lstm2(x2, self.hidden2)
+        # x4 = self.dropout2(x3[:, -1, :])
+        # x4 = x4.view(self.batch_size, 1, x4.size()[1])
+        # x5, self.hidden2 = self.lstm3(x4, self.hidden3)
+        # final_result = self.hidden2label(x5[:, -1, :])
         
         # ! sqeMIA
         # print(f"input Dim: {self.input_dim}")
         # print(f"output Dim: {output.size()}")
         
         
-      
+        # exit()
         
         # x = output.view(self.batch_size, 1, self.input_dim)
         
@@ -347,7 +334,6 @@ class CombinedShadowAttackModel(nn.Module):
         # final_result = self.hidden2label(x5[:, -1, :])
         
         return final_result
-
 
 
 
@@ -392,6 +378,48 @@ class ShadowAttackModel(nn.Module):
 		return final_result
 
 
+# class PartialAttackModel(nn.Module):
+# 	def __init__(self, class_num):
+# 		super(PartialAttackModel, self).__init__()
+# 		self.Output_Component = nn.Sequential(
+# 			# nn.Dropout(p=0.2),
+# 			nn.Linear(class_num, 128),
+# 			nn.ReLU(),
+# 			nn.Linear(128, 64),
+# 		)
+
+# 		self.Prediction_Component = nn.Sequential(
+# 			# nn.Dropout(p=0.2),
+# 			nn.Linear(1, 128),
+# 			nn.ReLU(),
+# 			nn.Linear(128, 64),
+# 		)
+
+# 		self.Encoder_Component = nn.Sequential(
+# 			# nn.Dropout(p=0.2),
+# 			nn.Linear(128, 256),
+# 			nn.ReLU(),
+# 			# nn.Dropout(p=0.2),
+# 			nn.Linear(256, 128),
+# 			nn.ReLU(),
+# 			# nn.Dropout(p=0.2),
+# 			nn.Linear(128, 64),
+# 			nn.ReLU(),
+# 			nn.Linear(64, 2),
+# 		)
+
+
+# 	def forward(self, output, prediction):
+# 		Output_Component_result = self.Output_Component(output)
+# 		Prediction_Component_result = self.Prediction_Component(prediction)
+		
+# 		final_inputs = torch.cat((Output_Component_result, Prediction_Component_result), 1)
+# 		final_result = self.Encoder_Component(final_inputs)
+
+# 		return final_result
+
+
+
 def train_model(PATH, device, train_set, test_set, model, use_DP, noise, norm, delta, dataset_name):
     print("Training model: train set shape", len(train_set), " test set shape: ", len(test_set), ", device: ", device)
     print(f"dataset Name: {dataset_name}")
@@ -403,7 +431,7 @@ def train_model(PATH, device, train_set, test_set, model, use_DP, noise, norm, d
     model = model_training(train_loader, test_loader, model, device, use_DP, noise, norm, delta)
     acc_train = 0
     acc_test = 0
-
+	
     for i in range(60):
         print("<======================= Epoch " + str(i+1) + " =======================>")
         print("target training")
@@ -425,7 +453,6 @@ def train_model(PATH, device, train_set, test_set, model, use_DP, noise, norm, d
   
 def test_meminf(PATH, device, num_classes, target_train, target_test, shadow_train, shadow_test, target_model, shadow_model, train_rnn, train_shadow, use_DP, noise, norm, delta, mode):
     
-   
     batch_size = 64
     if train_shadow:
         shadow_trainloader = torch.utils.data.DataLoader(
@@ -442,8 +469,6 @@ def test_meminf(PATH, device, num_classes, target_train, target_test, shadow_tra
         train_shadow_model(PATH, device, shadow_model, shadow_trainloader, shadow_testloader, use_DP, noise, norm, loss, optimizer, delta)
         # exit()
     
-    
-    
     # collect training data for attack model as we have already trained shadow and target model
     if mode == 0 or mode == 3 or mode == -1 or mode == -2:
         attack_trainloader, attack_testloader = get_attack_dataset_with_shadow(
@@ -451,28 +476,10 @@ def test_meminf(PATH, device, num_classes, target_train, target_test, shadow_tra
     else:
         attack_trainloader, attack_testloader = get_attack_dataset_without_shadow(target_train, target_test, batch_size)
 
-    #for white box
-    if mode == 2 or mode == 3:
-        gradient_size = get_gradient_size(target_model)
-        total = gradient_size[0][0] // 2 * gradient_size[0][1] // 2
-
-    # Traing RNN model 
-    if train_rnn:
-        print(f"Traing RNN mode TRRUE\n")
-        rnn_model = LSTMClassifier(num_classes,  device)
-        
-        print(f"rnn_model: {rnn_model}")
-        # exit()
-
-        attack_mode0_rnn(PATH + "_target.pth", PATH + "_shadow.pth", PATH, device, attack_trainloader, attack_testloader, target_model, shadow_model, rnn_model, 1, num_classes)
-        exit()
-    print(f"mode: {mode}")
    
-    # for black box
-    # for blackbox first attack model is created
     if mode == -1:
         attack_model = CombinedShadowAttackModel(num_classes,  device,  hidden_dim=128, layer_dim=1, output_dim=1, batch_size=batch_size)
-        # attack_model = ShadowAttackModel(num_classes)
+        
         print(attack_model)
         # attack_mode0(PATH + "_target.pth", PATH + "_shadow.pth", PATH, device, attack_trainloader, attack_testloader, target_model, shadow_model, attack_model, 1, num_classes)
         attack_mode0_com(PATH + "_target.pth", PATH + "_shadow.pth", PATH, device, attack_trainloader, attack_testloader, target_model, shadow_model, attack_model, 1, num_classes, mode)
@@ -488,22 +495,10 @@ def test_meminf(PATH, device, num_classes, target_train, target_test, shadow_tra
     elif mode == 0:
         attack_model = ShadowAttackModel(num_classes)
         attack_mode0(PATH + "_target.pth", PATH + "_shadow.pth", PATH, device, attack_trainloader, attack_testloader, target_model, shadow_model, attack_model, 1, num_classes)
-
-    elif mode == 1:
-        attack_model = PartialAttackModel(num_classes)
-        attack_mode1(PATH + "_target.pth", PATH, device, attack_trainloader, attack_testloader, target_model, attack_model, 1, num_classes)
-
-    elif mode == 2:
-        attack_model = WhiteBoxAttackModel(num_classes, total)
-        attack_mode2(PATH + "_target.pth", PATH, device, attack_trainloader, attack_testloader, target_model, attack_model, 1, num_classes)
-
-    elif mode == 3:
-        attack_model = WhiteBoxAttackModel(num_classes, total)
-        attack_mode3(PATH + "_target.pth", PATH + "_shadow.pth", PATH, device, 
-            attack_trainloader, attack_testloader, target_model, shadow_model, attack_model, 1, num_classes)
     else:
         raise Exception("Wrong mode")
     
+
 
 def str_to_bool(string):
     if isinstance(string, bool):
@@ -535,7 +530,6 @@ def main():
     os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu
     device = torch.device("cuda:0")
     torch.cuda.empty_cache()
-
     dataset_name = args.dataset_name
     attr = args.attributes
     if "_" in attr:
@@ -558,24 +552,32 @@ def main():
     TARGET_PATH = TARGET_ROOT + dataset_name
     print("Target_patth: ", TARGET_PATH)
     
-
+    # num_classes, target_train, target_test, shadow_train, shadow_test, attack_test, target_model, shadow_model = prepare_dataset(dataset_name, attr, root, device)
     num_classes, target_train, target_test, shadow_train, shadow_test, target_model, shadow_model = prepare_dataset(dataset_name, attr, root, device)
     
- 
-    if args.train_rnn:
-        print("Training rnn model True")
-
-
-
     if args.train_model:
         print("Training Target model")
         
         train_model(TARGET_PATH, device, target_train, target_test, target_model, use_DP, noise, norm, delta, dataset_name)
-        
+   
     # membership inference
     if args.attack_type == 0:
-       test_meminf(TARGET_PATH, device, num_classes, target_train, target_test, shadow_train, shadow_test, target_model, shadow_model, train_rnn, train_shadow, use_DP, noise, norm, delta, mode)
+        # test_meminf(TARGET_PATH, device, num_classes, target_train, target_test, shadow_train, shadow_test, attack_test, target_model, shadow_model, train_rnn, train_shadow, use_DP, noise, norm, delta, mode)
+        test_meminf(TARGET_PATH, device, num_classes, target_train, target_test, shadow_train, shadow_test, target_model, shadow_model, train_rnn, train_shadow, use_DP, noise, norm, delta, mode)
         
+    # model inversion
+    elif args.attack_type == 1:
+        train_DCGAN(TARGET_PATH, device, shadow_test + shadow_train, dataset_name)
+        test_modinv(TARGET_PATH, device, num_classes, target_train, target_model, dataset_name)
+
+    # attribut inference
+    elif args.attack_type == 2:
+        test_attrinf(TARGET_PATH, device, num_classes, target_train, target_test, target_model)
+
+    # model stealing
+    elif args.attack_type == 3:
+        test_modsteal(TARGET_PATH, device, shadow_train+shadow_test, target_test, target_model, shadow_model)
+
     else:
         sys.exit("we have not supported this mode yet! 0c0")
 
