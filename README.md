@@ -12,7 +12,7 @@ For the UTKFace dataset, we utilize two folders that can be downloaded from the 
 - `processed`: This folder contains three `landmark_list` files (also downloadable from the official website). These files are used for quickly accessing image names, as all image features can be inferred from the file names.
 - `raw`: Contains all aligned and cropped images from the dataset.
 
-### FMNIST and STL10 Datasets
+### Other Datasets
 
 For FMNIST and STL10, CIFART-10, CIFAR-100 PyTorch provides these datasets, which can be easily used within the framework.
 
