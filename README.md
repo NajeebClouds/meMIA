@@ -4,7 +4,6 @@ This repository contains the demo code for the meMIA (Membership Inference Attac
 
 ## Building Datasets
 
-Users are recommended to provide their own data loaders. However, we include a demo data loader in the code. Due to the large size of the datasets, we do not upload them to GitHub.
 
 ### UTKFace Dataset
 
@@ -15,7 +14,7 @@ For the UTKFace dataset, we utilize two folders that can be downloaded from the 
 
 ### FMNIST and STL10 Datasets
 
-For FMNIST and STL10, PyTorch provides these datasets, which can be easily used within the framework.
+For FMNIST and STL10, CIFART-10, CIFAR-100 PyTorch provides these datasets, which can be easily used within the framework.
 
 ## Setup
 
@@ -34,5 +33,9 @@ python meMIA_main.py --attack_type X --dataset_name Y
 
 #If you have note trained shadow and target models, run the following
 python meMIA_main.py --attack_type X --dataset_name Y --mode -1 --train_shadow --train_model
+
+# Example
+python meMIA_main.py --attack_type 0 --dataset_name cifar10 --mode -1 --train_shadow --train_model
+
 
 
