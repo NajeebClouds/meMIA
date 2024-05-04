@@ -540,11 +540,10 @@ def main():
     norm = args.norm
     delta = args.delta
     mode = args.mode
-    # train_shadow = args.train_shadow = True
+ 
     train_shadow = args.train_shadow
     train_rnn = args.train_rnn
-    print(f"train_shadow: {train_shadow}")
-    # exit()
+
     TARGET_ROOT = "./demoloader/trained_model/"
     if not os.path.exists(TARGET_ROOT):
         print(f"Create directory named {TARGET_ROOT}")
@@ -552,7 +551,6 @@ def main():
     TARGET_PATH = TARGET_ROOT + dataset_name
     print("Target_patth: ", TARGET_PATH)
     
-    # num_classes, target_train, target_test, shadow_train, shadow_test, attack_test, target_model, shadow_model = prepare_dataset(dataset_name, attr, root, device)
     num_classes, target_train, target_test, shadow_train, shadow_test, target_model, shadow_model = prepare_dataset(dataset_name, attr, root, device)
     
     if args.train_model:
@@ -564,20 +562,6 @@ def main():
     if args.attack_type == 0:
         # test_meminf(TARGET_PATH, device, num_classes, target_train, target_test, shadow_train, shadow_test, attack_test, target_model, shadow_model, train_rnn, train_shadow, use_DP, noise, norm, delta, mode)
         test_meminf(TARGET_PATH, device, num_classes, target_train, target_test, shadow_train, shadow_test, target_model, shadow_model, train_rnn, train_shadow, use_DP, noise, norm, delta, mode)
-        
-    # model inversion
-    elif args.attack_type == 1:
-        train_DCGAN(TARGET_PATH, device, shadow_test + shadow_train, dataset_name)
-        test_modinv(TARGET_PATH, device, num_classes, target_train, target_model, dataset_name)
-
-    # attribut inference
-    elif args.attack_type == 2:
-        test_attrinf(TARGET_PATH, device, num_classes, target_train, target_test, target_model)
-
-    # model stealing
-    elif args.attack_type == 3:
-        test_modsteal(TARGET_PATH, device, shadow_train+shadow_test, target_test, target_model, shadow_model)
-
     else:
         sys.exit("we have not supported this mode yet! 0c0")
 
