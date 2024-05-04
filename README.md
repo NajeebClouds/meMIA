@@ -14,7 +14,8 @@ For the UTKFace dataset, we utilize two folders that can be downloaded from the 
 
 ### Other Datasets
 
-For FMNIST and STL10, CIFART-10, CIFAR-100 PyTorch provides these datasets, which can be easily used within the framework.
+.For FMNIST and STL10, CIFART-10, CIFAR-100 PyTorch provides these datasets, which can be easily used within the framework.
+.Location and Purchase datasets have to be downloaded from 
 
 ## Setup
 
