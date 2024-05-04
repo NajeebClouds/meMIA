@@ -14,8 +14,12 @@ For the UTKFace dataset, we utilize two folders that can be downloaded from the 
 
 ### Other Datasets
 
-.For FMNIST and STL10, CIFART-10, CIFAR-100 PyTorch provides these datasets, which can be easily used within the framework.
-.Location and Purchase datasets have to be downloaded from 
+- For FMNIST and STL10, CIFART-10, CIFAR-100, PyTorch provides these datasets, which can be easily used within the framework.
+
+- Location and Purchase datasets have to be downloaded from the following links and its usage has been discussed in the paper:
+  - [Foursquare Dataset](https://sites.google.com/site/yangdingqi/home/foursquare-dataset)
+  - [Kaggle Acquire Valued Shoppers Challenge Data](https://www.kaggle.com/c/acquire-valued-shoppers-challenge/data)
+
 
 ## Setup
 
